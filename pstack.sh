@@ -47,9 +47,12 @@ else
 fi
 
 # Run GDB, strip out unwanted noise.
-$GDB --quiet $readnever -nx /proc/${ARG_PID}/exe ${ARG_PID} <<EOF 2>&1 |
-$backtrace
-EOF
+
+# $GDB --quiet $readnever -nx /proc/${ARG_PID}/exe ${ARG_PID} <<EOF 2>&1 |
+# $backtrace
+# EOF
+
+${GDB} --batch --quiet ${readnever} -n -ex "thread" -ex "${backtrace}" /proc/${ARG_PID}/exe ${ARG_PID} | \
 /bin/sed -n \
     -e 's/^(gdb) //' \
     -e '/^#/p' \
